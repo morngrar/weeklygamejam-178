@@ -1,5 +1,12 @@
 
+export const SCORE_BAR_HEIGHT = 30;
+
+export const GIFT_SCORE_VALUE = 3;
+export const CAKE_SCORE_VALUE = 9;
+
 export const GIFT_RADIUS = 25;
+export const CAKE_RADIUS = 30;
+export const BOMB_RADIUS = 30;
 export const ENTITY_TYPES = {
     NONE: "none",
     GIFT: "gift",

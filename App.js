@@ -7,10 +7,12 @@ import { BulletContainer } from "./src/bulletContainer";
 // components
 import { Shooter } from "./src/components/shooter";
 import { Gift } from "./src/components/gift";
+import { ScoreBar } from "./src/components/scoreBar";
 
 // entities
 import { Entity } from "./src/entities/entity";
 import { GiftEntity } from "./src/entities/giftEntity";
+import { CakeEntity } from "./src/entities/cakeEntity";
 
 import * as common from "./src/common";
 import { TargetContainer } from "./src/targetContainer";
@@ -40,6 +42,8 @@ export default class BestGameEver extends PureComponent {
       bullets: [],
       targets: [],
       spawnCooldown: 0,
+      score: 0,
+      scoreMultiplier: 1,
     };
 
   }
@@ -50,16 +54,22 @@ export default class BestGameEver extends PureComponent {
         ...this.state,
         spawnCooldown: this.state.spawnCooldown - time.delta,
       });
-    } else if (this.state.spawnCooldown <= 0 ) {
+    } else if (this.state.spawnCooldown <= 0) {
       // spawn random target
       // radomly decide target type
+      let entity = null;
+      let rng = Math.random()
+      if (rng > 0.7)
+        entity = new CakeEntity(WIDTH, HEIGHT);
+      else
+        entity = new GiftEntity(WIDTH, HEIGHT);
 
       // add the entity
       this.setState({
         ...this.state,
         targets: [
           ...this.state.targets,
-          new GiftEntity(WIDTH, HEIGHT),
+          entity,
         ],
         spawnCooldown: 800 * Math.random() + 800,
       })
@@ -125,6 +135,21 @@ export default class BestGameEver extends PureComponent {
 
       if (target.position[1] > HEIGHT) {
         // if gift, we've snatched it!
+        switch (target.type) {
+          case common.ENTITY_TYPES.GIFT:
+            this.setState({
+              ...this.state,
+              score: this.state.score + this.state.scoreMultiplier * common.GIFT_SCORE_VALUE,
+            });
+            break;
+          case common.ENTITY_TYPES.CAKE:
+            this.setState({
+              ...this.state,
+              score: this.state.score + this.state.scoreMultiplier * common.CAKE_SCORE_VALUE,
+              scoreMultiplier: this.state.scoreMultiplier + 1,
+            });
+            break;
+        }
         // increment score
 
         // destroy the target
@@ -202,6 +227,7 @@ export default class BestGameEver extends PureComponent {
           screenHeight={HEIGHT}
           state={{ stateGetter: () => this.state.shooter }} />
 
+        <ScoreBar width={WIDTH} height={common.SCORE_BAR_HEIGHT} stateGetter={() => this.state} />
       </GameLoop>
     );
   }
