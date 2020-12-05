@@ -1,20 +1,23 @@
 
+import * as common from "../common";
+
 import React, { PureComponent } from "react";
 import { StyleSheet, View } from "react-native";
 
-const RADIUS = 25
+const RADIUS = common.GIFT_RADIUS;
 
-class Target extends PureComponent {
+class Gift extends PureComponent {
 
     constructor(props) {
         super(props);
-        // maybe enforce y-coordinate here?
+
+        this.getState = props.stateGetter;
     }
 
 
     render() {
-        const x = this.props.position[0] - RADIUS / 2;
-        const y = this.props.position[1] - RADIUS / 2;
+        const x = this.getState().position[0] - RADIUS / 2;
+        const y = this.getState().position[1] - RADIUS / 2;
         return (
             <View style={[styles.target, { left: x, top: y }]} />
         );
@@ -28,9 +31,9 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     width: RADIUS * 2,
     height: RADIUS * 2,
-    borderRadius: RADIUS * 2
+    borderRadius: 2
   },
 });
 
 
-export { Target };
+export { Gift };

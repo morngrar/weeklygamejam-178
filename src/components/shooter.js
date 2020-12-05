@@ -12,15 +12,13 @@ class Shooter extends PureComponent {
         this.y = HEIGHT * 0.9;
 
         this.stateGetter = props.state.stateGetter;
-        // console.log("shooter constructor state: ", this.stateGetter());
     }
 
 
     render() {
         const state = this.stateGetter();
         const x = state.x - RADIUS;
-        const y = this.y //state.y - RADIUS;
-        // console.log("Rendered!", x, y);
+        const y = this.y 
         return (
             <View style={
                 [

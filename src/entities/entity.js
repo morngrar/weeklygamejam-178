@@ -1,12 +1,13 @@
+import {ENTITY_TYPES, getNewChildId} from "../common";
 
-
-let lastId = -1;
 
 class Entity {
     constructor(position, radius) {
         this.position = position;
         this.radius = radius;
-        this.id = ++lastId;
+        this.id = getNewChildId();
+        this.type = ENTITY_TYPES.NONE;
+        this.ySpeed = 0;
     }
 
     collidesWith(entity) {

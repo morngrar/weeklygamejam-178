@@ -3,14 +3,17 @@ import React, { PureComponent } from "react";
 import { AppRegistry, StyleSheet, Dimensions, StatusBar } from "react-native";
 import { GameLoop } from "react-native-game-engine";
 import { BulletContainer } from "./src/bulletContainer";
-import { Bullet } from "./src/components/bullet";
 
 // components
 import { Shooter } from "./src/components/shooter";
-import { Target } from "./src/components/target";
+import { Gift } from "./src/components/gift";
 
 // entities
 import { Entity } from "./src/entities/entity";
+import { GiftEntity } from "./src/entities/giftEntity";
+
+import * as common from "./src/common";
+import { TargetContainer } from "./src/targetContainer";
 
 
 export const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
@@ -18,10 +21,9 @@ export const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 const BULLET_VELOCITY = HEIGHT * 0.02;
 
 
-let lastBulletId = -1;
 function newBulletState(pos) {
   return {
-    id: ++lastBulletId,
+    id: common.getNewChildId(),
     position: pos,
     radius: 5,
   };
@@ -36,14 +38,33 @@ export default class BestGameEver extends PureComponent {
         cooldown: 0,
       },
       bullets: [],
-      targets: [
-        new Entity([WIDTH/2, HEIGHT/2], 25),
-      ]
+      targets: [],
+      spawnCooldown: 0,
     };
 
   }
 
   updateHandler = ({ touches, screen, layout, time }) => {
+    if (this.state.spawnCooldown > 0) {
+      this.setState({
+        ...this.state,
+        spawnCooldown: this.state.spawnCooldown - time.delta,
+      });
+    } else if (this.state.spawnCooldown <= 0 ) {
+      // spawn random target
+      // radomly decide target type
+
+      // add the entity
+      this.setState({
+        ...this.state,
+        targets: [
+          ...this.state.targets,
+          new GiftEntity(WIDTH, HEIGHT),
+        ],
+        spawnCooldown: 800 * Math.random() + 800,
+      })
+    }
+
     let move = touches.find(x => x.type === "move");
     let press = touches.find(x => x.type === "press");
     if (press && !this.state.shooter.cooldown) {
@@ -94,22 +115,59 @@ export default class BestGameEver extends PureComponent {
       });
     }
 
+    // move targets downward
+    let new_targets = [];
+    this.state.targets.forEach(target => {
+      target.position[1] += target.ySpeed;
+      // console.log("ySpeed: ", target.ySpeed);
+      // console.log("pos: ", target.position);
+      // perhaps check for collisions here (net at level2)
+
+      if (target.position[1] > HEIGHT) {
+        // if gift, we've snatched it!
+        // increment score
+
+        // destroy the target
+        return;
+      }
+
+
+      new_targets = [
+        ...new_targets,
+        target,
+      ]
+    });
+    this.setState(
+      {
+        ...this.state,
+        targets: new_targets,
+      }
+    );
+
     // Move bullets upward
     let new_bullets = [];
     this.state.bullets.forEach(bullet => {
       bullet.position[1] -= BULLET_VELOCITY;
+      let collision = false;
 
-
-      // TODO: collision detection against targets
       this.state.targets.forEach(target => {
-        if (target.collidesWith(bullet)) {
+        if (
+          target.type != common.ENTITY_TYPES.NONE
+          && target.collidesWith(bullet)
+        ) {
           this.setState({
             ...this.state,
             targets: this.state.targets.filter(entity => entity.id != target.id)
           });
-          bullet = null;
+          collision = true;
         }
+
+
       });
+
+      if (collision) {
+        bullet = null;
+      }
 
       if (bullet !== null && bullet.position[1] >= 0) {
         new_bullets = [
@@ -118,6 +176,8 @@ export default class BestGameEver extends PureComponent {
         ]
       }
     });
+
+
     this.setState(
       {
         ...this.state,
@@ -136,10 +196,7 @@ export default class BestGameEver extends PureComponent {
         <StatusBar hidden={true} />
 
         <BulletContainer stateGetter={() => this.state.bullets} />
-
-        {this.state.targets.map(target => {
-          return (<Target key={target.id} position={target.position} />);
-        })}
+        <TargetContainer stateGetter={() => this.state.targets} />
 
         <Shooter
           screenHeight={HEIGHT}
