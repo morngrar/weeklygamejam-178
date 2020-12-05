@@ -1,8 +1,8 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Image } from "react-native";
 
 
-const RADIUS = 25
+const RADIUS = 35;
 
 class Shooter extends PureComponent {
 
@@ -19,14 +19,21 @@ class Shooter extends PureComponent {
         const state = this.stateGetter();
         const x = state.x - RADIUS;
         const y = this.y 
-        return (
-            <View style={
-                [
-                    state.cooldown ? styles.tappedShooter : styles.shooter, 
-                    { left: x, top: y }
-                ]
-            } />
-        );
+
+        if (state.cooldown) {
+          return (
+            <Image 
+                style={[styles.shooter, { left: x, top: y }]} 
+                source={require("../../assets/smoking.png")}/>
+          );
+        } else {
+          return (
+            <Image 
+                style={[styles.shooter, { left: x, top: y }]} 
+                source={require("../../assets/ready.png")}/>
+          );
+
+        }
     }
 }
 
@@ -35,18 +42,9 @@ const DIAMETER = RADIUS * 2;
 const styles = StyleSheet.create({
   shooter: {
     position: "absolute",
-    backgroundColor: "#46915a",
     width: DIAMETER,
     height: DIAMETER,
-    borderRadius: DIAMETER,
   },
-  tappedShooter: {
-    position: "absolute",
-    backgroundColor: "blue",
-    width: DIAMETER,
-    height: DIAMETER,
-    borderRadius: DIAMETER,
-  }
 });
 
 export {Shooter};

@@ -1,5 +1,6 @@
 
 export const SCORE_BAR_HEIGHT = 30;
+export const H_MARGIN = 20;
 
 export const GIFT_SCORE_VALUE = 3;
 export const CAKE_SCORE_VALUE = 9;

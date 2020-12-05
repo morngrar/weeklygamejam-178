@@ -4,6 +4,7 @@ import React, { PureComponent } from "react";
 import * as common from "./common";
 import { Gift } from "./components/gift";
 import { Cake } from "./components/cake";
+import { Bomb } from "./components/bomb";
 
 
 
@@ -24,6 +25,8 @@ class TargetContainer extends PureComponent {
                             return (<Gift key={target.id} stateGetter={() => target} />);
                         case common.ENTITY_TYPES.CAKE:
                             return (<Cake key={target.id} stateGetter={() => target} />);
+                        case common.ENTITY_TYPES.BOMB:
+                            return (<Bomb key={target.id} stateGetter={() => target} />);
 
                         default: return null;
 

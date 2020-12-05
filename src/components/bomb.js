@@ -1,4 +1,3 @@
-//it's not a lie
 
 
 import * as common from "../common";
@@ -6,9 +5,9 @@ import * as common from "../common";
 import React, { PureComponent } from "react";
 import { StyleSheet, Image } from "react-native";
 
-const RADIUS = common.CAKE_RADIUS;
+const RADIUS = common.BOMB_RADIUS;
 
-class Cake extends PureComponent {
+class Bomb extends PureComponent {
 
     constructor(props) {
         super(props);
@@ -23,7 +22,7 @@ class Cake extends PureComponent {
         return (
             <Image 
                 style={[styles.target, { left: x, top: y }]} 
-                source={require("../../assets/cake.png")}/>
+                source={require("../../assets/bomb.png")}/>
         );
     }
 }
@@ -38,4 +37,4 @@ const styles = StyleSheet.create({
 });
 
 
-export { Cake };
+export { Bomb };

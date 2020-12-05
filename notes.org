@@ -5,12 +5,13 @@
 * Day 2
 
 
-** Idea [0%]
+** Idea [33%]
 - Game about snatching birthday gifts
 - Gifts, birthday cakes and dangerous objects are hurtling towards the player
 - The player must defend themselves against the dangerous objects, while snatching up as many gifts and cakes as possible
 
-*** TODO Level 1 --- Main target for the jam [66%]
+*** DONE Level 1 --- Main target for the jam [100%]
+CLOSED: [2020-12-05 lø. 22:52]
 - [X] The player controls a shooter that can only move in the x-axis by dragging their finger across the screen.
   + [X] Make a shooter component
   + [X] Create a bullet entity
@@ -22,20 +23,23 @@
   + [X] add random spawning of target entities like gifts or cakes
   + [X] point system
   + [X] The birthday cakes act like gifts, but are rarer, and they give more points, in addition to adding a multiplier to the points gotten by future gifts
-- [ ] Dangerous objects are bombs, if they reach the bottom of the screen, the game is over
+- [X] Dangerous objects are bombs, if they reach the bottom of the screen, the game is over
 - [X] The player must tap the screen to fire a shot
 - [X] There is a cooldown between shots
 - [X] The shots from the shooter takes out gifts, cakes and dangerous objects alike
-- [ ] add sprites to the entities --- image path
+- [X] add sprites to the entities --- image path
 
 *** TODO Level 2 --- Extra content, if time allows [0%]
+- [ ] Prettify Score bar and backround color
+
+- [ ] Implement persistent high-score
+
 - [ ] Two tools, adding a net to catch gifts with, and the player can drag it in both the x and y directions
 
 - [ ] Knives are added as a dangerous object, they end the game if the player's tool collides with them
 
 - [ ] colliding with a bomb also ends the game
 
-- [ ] Maybe objects move more erratically, than just downwards
 *** TODO Level 3 --- Power ups [0%]
 - [ ] Power ups beyond the cakes
 - [ ] Perhaps reducing cooldown on shooter,  or making the bullets act differently?

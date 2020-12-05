@@ -1,6 +1,14 @@
 
 import React, { PureComponent } from "react";
-import { AppRegistry, StyleSheet, Dimensions, StatusBar } from "react-native";
+import { 
+  AppRegistry, 
+  StyleSheet, 
+  Dimensions, 
+  StatusBar, 
+  View, 
+  Button,
+  Text, 
+} from "react-native";
 import { GameLoop } from "react-native-game-engine";
 import { BulletContainer } from "./src/bulletContainer";
 
@@ -13,6 +21,7 @@ import { ScoreBar } from "./src/components/scoreBar";
 import { Entity } from "./src/entities/entity";
 import { GiftEntity } from "./src/entities/giftEntity";
 import { CakeEntity } from "./src/entities/cakeEntity";
+import { BombEntity } from "./src/entities/bombEntity";
 
 import * as common from "./src/common";
 import { TargetContainer } from "./src/targetContainer";
@@ -31,10 +40,7 @@ function newBulletState(pos) {
   };
 }
 
-export default class BestGameEver extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
+const BLANK_STATE = {
       shooter: {
         x: WIDTH / 2,
         cooldown: 0,
@@ -44,8 +50,13 @@ export default class BestGameEver extends PureComponent {
       spawnCooldown: 0,
       score: 0,
       scoreMultiplier: 1,
-    };
+      gameOver: false,
+}
 
+export default class BestGameEver extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = BLANK_STATE;
   }
 
   updateHandler = ({ touches, screen, layout, time }) => {
@@ -59,8 +70,10 @@ export default class BestGameEver extends PureComponent {
       // radomly decide target type
       let entity = null;
       let rng = Math.random()
-      if (rng > 0.7)
+      if (rng > 0.95)
         entity = new CakeEntity(WIDTH, HEIGHT);
+        else if (rng < 0.4)
+        entity = new BombEntity(WIDTH, HEIGHT);
       else
         entity = new GiftEntity(WIDTH, HEIGHT);
 
@@ -149,8 +162,12 @@ export default class BestGameEver extends PureComponent {
               scoreMultiplier: this.state.scoreMultiplier + 1,
             });
             break;
+          case common.ENTITY_TYPES.BOMB:
+            this.setState({
+              ...this.state,
+              gameOver: true,
+            })
         }
-        // increment score
 
         // destroy the target
         return;
@@ -215,21 +232,71 @@ export default class BestGameEver extends PureComponent {
 
 
   render() {
-    // console.log("Main component render with state: ", this.state);
-    return (
-      <GameLoop style={styles.container} onUpdate={this.updateHandler}>
-        <StatusBar hidden={true} />
+    if (this.state.gameOver) {
+      let scoreText = this.state.score
+      return (
+        <View style={styles.gameOverScreen}>
+          <Text
+            style={
+              [
+                styles.text,
+                {
+                  left: common.H_MARGIN,
+                  top: HEIGHT / 2 - 50,
+                }
+              ]
+            }>
+            {"Game Over!"}
+          </Text>
 
-        <BulletContainer stateGetter={() => this.state.bullets} />
-        <TargetContainer stateGetter={() => this.state.targets} />
+          <Text
+            style={
+              [
+                styles.text,
+                {
+                  left: common.H_MARGIN,
+                  top: HEIGHT / 2,
+                }
+              ]
+            }>
+            {"Score: "}
+          </Text>
 
-        <Shooter
-          screenHeight={HEIGHT}
-          state={{ stateGetter: () => this.state.shooter }} />
+          <Text
+            style={
+              [
+                styles.scoreValue,
+                {
+                  left: common.H_MARGIN,
+                  top: HEIGHT / 2,
+                }
+              ]
+            }>
+            {scoreText}
+          </Text>
 
-        <ScoreBar width={WIDTH} height={common.SCORE_BAR_HEIGHT} stateGetter={() => this.state} />
-      </GameLoop>
-    );
+            <Button style={[styles.button, {top: HEIGHT - 100}]} title="New Game" onPress={() => this.setState(BLANK_STATE)} />
+
+
+        </View>
+      );
+    } else {
+
+      return (
+        <GameLoop style={styles.container} onUpdate={this.updateHandler}>
+          <StatusBar hidden={true} />
+
+          <BulletContainer stateGetter={() => this.state.bullets} />
+          <TargetContainer stateGetter={() => this.state.targets} />
+
+          <Shooter
+            screenHeight={HEIGHT}
+            state={{ stateGetter: () => this.state.shooter }} />
+
+          <ScoreBar width={WIDTH} height={common.SCORE_BAR_HEIGHT} stateGetter={() => this.state} />
+        </GameLoop>
+      );
+    }
   }
 }
 
@@ -238,6 +305,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#160561"
   },
+  gameOverScreen: {
+    flex: 2,
+    backgroundColor: "#160561"
+  },
+  text: {
+    fontSize: 28,
+    color: "white",
+  },
+  scoreValue: {
+    fontSize: 18,
+    color: "white",
+  },
+  button: {
+    position: "absolute",
+    width: 300
+  }
 });
 
 AppRegistry.registerComponent("BestGameEver", () => BestGameEver);
