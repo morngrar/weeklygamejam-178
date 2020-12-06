@@ -127,7 +127,7 @@ export default class GiftSnatcher extends React.Component {
         entity = new CakeEntity(WIDTH, HEIGHT);
       else if (rng < 0.08)
         entity = new BladeEntity(WIDTH, HEIGHT);
-      else if (rng < 0.1)
+      else if (rng < 0.1 && !this.state.shooter.laser)
         entity = new LaserGunEntity(WIDTH, HEIGHT);
       else if (rng < 0.3)
         entity = new BombEntity(WIDTH, HEIGHT);
