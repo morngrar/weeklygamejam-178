@@ -5,6 +5,8 @@ import * as common from "./common";
 import { Gift } from "./components/gift";
 import { Cake } from "./components/cake";
 import { Bomb } from "./components/bomb";
+import { Blade } from "./components/blade";
+import { LaserGunPowerup } from "./components/laserGun";
 
 
 
@@ -27,6 +29,10 @@ class TargetContainer extends PureComponent {
                             return (<Cake key={target.id} stateGetter={() => target} />);
                         case common.ENTITY_TYPES.BOMB:
                             return (<Bomb key={target.id} stateGetter={() => target} />);
+                        case common.ENTITY_TYPES.BLADE:
+                            return (<Blade key={target.id} stateGetter={() => target} />);
+                        case common.ENTITY_TYPES.LASER_GUN:
+                            return (<LaserGunPowerup key={target.id} stateGetter={() => target} />);
 
                         default: return null;
 

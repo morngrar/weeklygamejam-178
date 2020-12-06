@@ -11,12 +11,12 @@ class ScoreBar extends PureComponent {
         this.styles = StyleSheet.create({
             bar: {
                 position: "absolute",
-                backgroundColor: "gray",
+                backgroundColor: "#265aad",
                 width: props.width,
                 height: props.height,
             },
             text: {
-                color: "red",
+                color: "#e6d087",
             }
         });
 

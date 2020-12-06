@@ -16,8 +16,6 @@ class BombEntity extends Entity {
         super(position, common.BOMB_RADIUS)
         this.type = common.ENTITY_TYPES.BOMB;
         this.ySpeed = screenHeight * (Math.random() * common.GIFT_MAX_SPEED + common.GIFT_MIN_SPEED);
-
-        // sprites will be added here, i think
     }
 }
 
