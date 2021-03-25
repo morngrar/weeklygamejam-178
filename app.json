@@ -28,6 +28,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "The result of a 48h game jam as part of a university course, where I hadn't used either react native nor expo before.",
+    "githubUrl": "https://github.com/morngrar/weeklygamejam-178"
   }
 }

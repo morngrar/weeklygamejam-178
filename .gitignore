@@ -9,6 +9,10 @@ npm-debug.*
 *.orig.*
 web-build/
 
+
+# emacs stuff
+.auctex-auto/
+
 # macOS
 .DS_Store
 
